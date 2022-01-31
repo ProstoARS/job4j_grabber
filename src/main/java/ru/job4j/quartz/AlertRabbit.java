@@ -18,7 +18,7 @@ public class AlertRabbit {
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
             AlertRabbit alertRabbit = new AlertRabbit();
-            alertRabbit.read("C:\\IdeaProjects\\job4j_grabber\\src\\main\\resources\\rabbit.properties");
+            alertRabbit.read("rabbit.properties");
             JobDetail job = newJob(Rabbit.class).build();
             SimpleScheduleBuilder times = simpleSchedule()
                     .withIntervalInSeconds(interval)
@@ -34,7 +34,8 @@ public class AlertRabbit {
     }
 
     public void read(String file) {
-        try (FileInputStream in = new FileInputStream(file)) {
+        ClassLoader loader = AlertRabbit.class.getClassLoader();
+        try (InputStream in = loader.getResourceAsStream(file)) {
             Properties properties = new Properties();
         properties.load(in);
         interval = Integer.parseInt(properties.getProperty("rabbit.interval"));
