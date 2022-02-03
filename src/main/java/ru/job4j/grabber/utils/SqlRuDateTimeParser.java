@@ -9,6 +9,9 @@ import static java.util.Map.entry;
 
 public class SqlRuDateTimeParser implements DateTimeParser {
 
+    private static final String TODAY = "сегодня,";
+    private static final String YESTERDAY = "вчера";
+
     private static final Map<String, String> MONTHS = Map.ofEntries(
             entry("янв", "1"),
             entry("фев", "2"),
@@ -29,9 +32,9 @@ public class SqlRuDateTimeParser implements DateTimeParser {
         LocalDateTime dateTime = null;
         String[] sub = parse.split(" ");
         if (sub.length == 2) {
-            if (sub[0].equals("сегодня,")) {
+            if (sub[0].equals(TODAY)) {
                 dateTime = parseTime(sub[1]);
-            } else if (sub[0].equals("вчера,")) {
+            } else if (sub[0].equals(YESTERDAY)) {
                 dateTime = parseTime(sub[1]);
                 dateTime = dateTime.minusDays(1);
             }
