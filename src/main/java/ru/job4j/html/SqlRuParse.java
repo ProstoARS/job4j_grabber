@@ -4,45 +4,64 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import ru.job4j.grabber.Parse;
 import ru.job4j.grabber.Post;
+import ru.job4j.grabber.utils.DateTimeParser;
 import ru.job4j.grabber.utils.SqlRuDateTimeParser;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-public class SqlRuParse {
+public class SqlRuParse implements Parse {
+    int count = 0;
+    private final DateTimeParser dateTimeParser;
+
+    public SqlRuParse(DateTimeParser dateTimeParser) {
+        this.dateTimeParser = dateTimeParser;
+    }
+
     public static void main(String[] args) throws Exception {
-        int count = 0;
+        List<Post> list = new ArrayList<>();
         for (int i = 1; i <= 2; i++) {
             String page = String.valueOf(i);
             String url = String.format("https://www.sql.ru/forum/job-offers/%s", page);
-            Document doc = Jsoup.connect(url).get();
-            Elements row = doc.select(".postslisttopic");
-            for (Element td : row) {
-                System.out.println("------" + count++);
-                Element parent = td.parent();
-                String desc = parent.child(1).child(0).attr("href");
-                System.out.println(desc);
-                System.out.println(getDescription(desc).toString());
-            }
+            SqlRuParse sqlRuParse = new SqlRuParse(new SqlRuDateTimeParser());
+            list = sqlRuParse.list(url);
+        }
+        for (Post p : list) {
+            System.out.println(p.toString());
         }
     }
 
-    public static Post getDescription(String url) throws IOException {
-        Document doc = Jsoup.connect(url).get();
+    @Override
+    public List<Post> list(String link) throws IOException {
+        List<Post> list = new ArrayList<>();
+        Document doc = Jsoup.connect(link).get();
+        Elements row = doc.select(".postslisttopic");
+        for (Element td : row) {
+            Element parent = td.parent();
+            Post post = detail(parent.child(1).child(0).attr("href"));
+            list.add(post);
+        }
+        return list;
+    }
+
+    @Override
+    public Post detail(String link) throws IOException {
+        Document doc = Jsoup.connect(link).get();
         Elements row = doc.select(".messageHeader");
         String desc;
         String title;
-        int id = 1;
         LocalDateTime date;
         Element parent = row.get(0).parent().parent();
         title = parent.child(0).child(0).text();
         desc = parent.child(1).child(1).text();
-        SqlRuDateTimeParser parser = new SqlRuDateTimeParser();
         String str = parent.child(2).child(0).text();
         int index = str.indexOf("[");
         str = str.substring(0, index);
-        date = parser.parse(str);
-        return new Post(id, title, url, desc, date);
+        date = dateTimeParser.parse(str);
+        return new Post(count++, title, link, desc, date);
     }
 }
