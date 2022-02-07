@@ -7,8 +7,6 @@ import org.jsoup.select.Elements;
 import ru.job4j.grabber.Parse;
 import ru.job4j.grabber.Post;
 import ru.job4j.grabber.utils.DateTimeParser;
-import ru.job4j.grabber.utils.SqlRuDateTimeParser;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -18,42 +16,35 @@ import java.util.regex.Pattern;
 
 public class SqlRuParse implements Parse {
     private final DateTimeParser dateTimeParser;
+    private final int page;
 
-    public SqlRuParse(DateTimeParser dateTimeParser) {
+    public SqlRuParse(DateTimeParser dateTimeParser, int page) {
         this.dateTimeParser = dateTimeParser;
-    }
-
-    public static void main(String[] args) {
-        List<Post> list = new ArrayList<>();
-        for (int i = 1; i <= 5; i++) {
-            String page = String.valueOf(i);
-            String url = String.format("https://www.sql.ru/forum/job-offers/%s", page);
-            SqlRuParse sqlRuParse = new SqlRuParse(new SqlRuDateTimeParser());
-            list = sqlRuParse.list(url);
-        }
-        for (Post p : list) {
-            System.out.println(p.toString());
-        }
+        this.page = page;
     }
 
     @Override
     public List<Post> list(String link) {
         List<Post> list = new ArrayList<>();
-        try {
-            Document doc = Jsoup.connect(link).get();
-            Elements row = doc.select(".postslisttopic");
-            for (Element td : row) {
-                Element parent = td.parent();
-                String header = parent.child(1).child(0).text().toLowerCase();
-                Pattern pattern = Pattern.compile("\\bjava\\b");
-                Matcher matcher = pattern.matcher(header);
-                if (matcher.find()) {
-                    Post post = detail(parent.child(1).child(0).attr("href"));
-                    list.add(post);
+        for (int i = 1; i <= page; i++) {
+            String page = String.valueOf(i);
+            String url = String.format(link + "/%s", page);
+            try {
+                Document doc = Jsoup.connect(url).get();
+                Elements row = doc.select(".postslisttopic");
+                for (Element td : row) {
+                    Element parent = td.parent();
+                    String header = parent.child(1).child(0).text().toLowerCase();
+                    Pattern pattern = Pattern.compile("\\bjava\\b");
+                    Matcher matcher = pattern.matcher(header);
+                    if (matcher.find()) {
+                        Post post = detail(parent.child(1).child(0).attr("href"));
+                        list.add(post);
+                    }
                 }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return list;
     }
