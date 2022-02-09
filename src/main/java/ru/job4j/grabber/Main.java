@@ -16,7 +16,7 @@ public class Main {
             config.load(in);
             Store psqlStore = new PsqlStore(config);
             SqlRuParse sqlRuParse = new SqlRuParse(new SqlRuDateTimeParser(), 5);
-            List<Post> listFromHtml = sqlRuParse.list("https://www.sql.ru/forum/job-offers");
+            List<Post> listFromHtml = sqlRuParse.list();
             for (Post p : listFromHtml) {
                 psqlStore.save(p);
             }
