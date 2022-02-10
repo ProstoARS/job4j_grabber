@@ -40,6 +40,7 @@ public class Grabber implements Grab {
         JobDataMap data = new JobDataMap();
         data.put("store", store);
         data.put("parse", parse);
+        data.put("link", cfg.getProperty("link"));
         JobDetail job = newJob(GrabJob.class)
                 .usingJobData(data)
                 .build();
@@ -81,7 +82,8 @@ public class Grabber implements Grab {
             JobDataMap map = context.getJobDetail().getJobDataMap();
             Store store = (Store) map.get("store");
             Parse parse = (Parse) map.get("parse");
-            List<Post> listFromHtml = parse.list();
+            String link = (String) map.get("link");
+            List<Post> listFromHtml = parse.list(link);
             for (Post p : listFromHtml) {
                 store.save(p);
             }

@@ -24,11 +24,11 @@ public class SqlRuParse implements Parse {
     }
 
     @Override
-    public List<Post> list() {
+    public List<Post> list(String link) {
         List<Post> list = new ArrayList<>();
         for (int i = 1; i <= page; i++) {
             String page = String.valueOf(i);
-            String url = String.format("https://www.sql.ru/forum/job-offers/%s", page);
+            String url = String.format(link + "/%s", page);
             try {
                 Document doc = Jsoup.connect(url).get();
                 Elements row = doc.select(".postslisttopic");

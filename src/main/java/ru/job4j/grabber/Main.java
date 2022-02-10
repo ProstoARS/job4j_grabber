@@ -16,7 +16,7 @@ public class Main {
             config.load(in);
             Store psqlStore = new PsqlStore(config);
             SqlRuParse sqlRuParse = new SqlRuParse(new SqlRuDateTimeParser(), 5);
-            List<Post> listFromHtml = sqlRuParse.list();
+            List<Post> listFromHtml = sqlRuParse.list(config.getProperty("link"));
             for (Post p : listFromHtml) {
                 psqlStore.save(p);
             }
