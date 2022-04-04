@@ -9,7 +9,7 @@ public abstract class AbstractCache<K, V> {
     protected final Map<K, SoftReference<V>> cache = new HashMap<>();
 
     public void put(K key, V value) {
-        SoftReference<V> ref = new SoftReference<V>(value);
+        SoftReference<V> ref = new SoftReference<>(value);
         cache.put(key, ref);
     }
 
@@ -23,5 +23,4 @@ public abstract class AbstractCache<K, V> {
     }
 
     protected abstract V load(K key);
-
 }
