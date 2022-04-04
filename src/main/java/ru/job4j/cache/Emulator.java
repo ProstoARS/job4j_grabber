@@ -8,11 +8,9 @@ public class Emulator {
         DirFileCache dfc = new DirFileCache(dir);
         System.out.println(dfc.load(file1));
         System.out.println("-----------------");
-        System.gc();
         System.out.println(dfc.get(file1));
         System.out.println("------------------");
         System.out.println(dfc.load(file2));
-        System.gc();
         System.out.println("------------------");
         System.out.println(dfc.get(file2));
     }
