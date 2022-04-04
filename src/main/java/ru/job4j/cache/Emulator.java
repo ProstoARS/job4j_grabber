@@ -12,6 +12,7 @@ public class Emulator {
         System.out.println(dfc.get(file1));
         System.out.println("------------------");
         System.out.println(dfc.load(file2));
+        System.gc();
         System.out.println("------------------");
         System.out.println(dfc.get(file2));
     }
