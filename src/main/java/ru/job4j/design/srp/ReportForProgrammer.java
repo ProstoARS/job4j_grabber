@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 public class ReportForProgrammer implements Report {
 
-    Store store;
+    private final Store store;
 
     public ReportForProgrammer(Store store) {
         this.store = store;

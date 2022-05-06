@@ -4,7 +4,7 @@ import java.util.function.Predicate;
 
 public class ReportIncreaseSalary implements Report {
 
-    private Store store;
+    private final Store store;
 
     private final double rate;
 
