@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class ReportEngineTest {
 
@@ -84,6 +85,43 @@ public class ReportEngineTest {
                 .append(worker.getName()).append(";")
                 .append(worker.getSalary()).append(";")
                 .append(System.lineSeparator());
+        assertEquals(engine.generate(em -> true), expect.toString());
+    }
+
+    @Test
+    public void whenToJsonGenerated() {
+        MemStore store = new MemStore();
+        Employee worker = new Employee("Ivan", new GregorianCalendar(2021, 5, 7),
+                new GregorianCalendar(2022, 5, 7), 100);
+        store.add(worker);
+        StringBuilder expect = new StringBuilder()
+                .append("{\"name\":\"").append(worker.getName()).append("\",")
+                .append("\"salary\":").append(worker.getSalary())
+                .append(",\"hired\":")
+                .append("{\"year\":2021,\"month\":5,\"dayOfMonth\":7,\"hourOfDay\":0,\"minute\":0,\"second\":0}")
+                .append(",")
+                .append("\"fired\":")
+                .append("{\"year\":2022,\"month\":5,\"dayOfMonth\":7,\"hourOfDay\":0,\"minute\":0,\"second\":0}}");
+
+
+        Report engine = new ReportToJson(store);
+
+        assertEquals(engine.generate(em -> true), expect.toString());
+    }
+
+    @Test
+    public void whenToXmlGenerated() {
+        MemStore store = new MemStore();
+        Employee worker = new Employee("Ivan", new GregorianCalendar(2021, 5, 7),
+                new GregorianCalendar(2022, 5, 7), 100);
+        store.add(worker);
+        Report engine = new ReportToXML(store);
+        StringBuilder expect = new StringBuilder()
+                .append("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n")
+                .append("<employee name=\"").append(worker.getName()).append("\" ")
+                .append("salary=\"").append(worker.getSalary()).append(("\" "))
+                .append("hired=\"2021-06-07T00:00:00+03:00\" ")
+                .append("fired=\"2022-06-07T00:00:00+03:00\"/>\n");
         assertEquals(engine.generate(em -> true), expect.toString());
     }
 }

@@ -1,13 +1,23 @@
 package ru.job4j.design.srp;
 
+import javax.xml.bind.annotation.*;
 import java.util.Calendar;
 import java.util.Objects;
 
+@XmlRootElement(name = "employee")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Employee {
+    @XmlAttribute
     private String name;
-    private Calendar hired;
-    private Calendar fired;
+    @XmlAttribute
     private double salary;
+    @XmlAttribute
+    private Calendar hired;
+    @XmlAttribute
+    private Calendar fired;
+
+    public Employee() {
+    }
 
     public Employee(String name, Calendar hired, Calendar fired, double salary) {
         this.name = name;
