@@ -20,18 +20,17 @@ public class ReportToXML implements Report {
     public String generate(Predicate<Employee> filter) {
         JAXBContext context;
         StringBuilder xml = new StringBuilder();
+        Employees employees = new Employees(store.findBy(filter));
         try {
-            context = JAXBContext.newInstance(Employee.class);
+            context = JAXBContext.newInstance(Employees.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-        for (Employee em : store.findBy(filter)) {
             try (StringWriter writer = new StringWriter()) {
-                marshaller.marshal(em, writer);
+                marshaller.marshal(employees, writer);
                 xml.append(writer);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
         } catch (JAXBException e) {
             e.printStackTrace();
         }

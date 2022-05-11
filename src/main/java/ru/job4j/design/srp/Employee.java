@@ -1,6 +1,7 @@
 package ru.job4j.design.srp;
 
 import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -12,8 +13,10 @@ public class Employee {
     @XmlAttribute
     private double salary;
     @XmlAttribute
+    @XmlJavaTypeAdapter(CalendarAdapterXml.class)
     private Calendar hired;
     @XmlAttribute
+    @XmlJavaTypeAdapter(CalendarAdapterXml.class)
     private Calendar fired;
 
     public Employee() {
