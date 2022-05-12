@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 
 public class ReportToXML implements Report {
 
-    Store store;
+    private final Store store;
 
     public ReportToXML(Store store) {
         this.store = store;

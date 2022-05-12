@@ -4,7 +4,6 @@ import java.util.function.Predicate;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import org.json.JSONObject;
 
 public class ReportToJson implements Report {
 
