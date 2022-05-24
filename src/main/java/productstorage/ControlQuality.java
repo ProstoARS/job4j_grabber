@@ -1,21 +1,23 @@
 package productstorage;
 
 
-public class ControlQuality {
-    Warehouse warehouse;
-    Shop shop;
-    Trash trash;
+import java.util.ArrayList;
 
-    public ControlQuality(Warehouse warehouse, Shop shop, Trash trash) {
-        this.warehouse = warehouse;
-        this.shop = shop;
-        this.trash = trash;
+public class ControlQuality {
+    ArrayList<Storage> storages;
+
+    public ControlQuality(ArrayList<Storage> storages) {
+        this.storages = storages;
     }
 
     public void distribution(Food food) {
-        warehouse.filter(food);
-        shop.filter(food);
-        trash.filter(food);
+        for (Storage s : storages) {
+            s.filter(food);
+        }
+    }
+
+    public void addStorage(Storage storage) {
+        storages.add(storage);
     }
 
 }

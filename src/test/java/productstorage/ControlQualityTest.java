@@ -4,14 +4,18 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
 public class ControlQualityTest {
     LocalDate now = LocalDate.of(2022, 5, 24);
-    Warehouse warehouse = new Warehouse();
-    Shop shop = new Shop();
-    Trash trash = new Trash();
+    Storage warehouse = new Warehouse();
+    Storage shop = new Shop();
+    Storage trash = new Trash();
+    ArrayList<Storage> storages = new ArrayList<>(List.of(warehouse, shop, trash));
+    ControlQuality controlQuality = new ControlQuality(storages);
 
     private void setPredicates(long shelfLife, long lifeTime) {
         warehouse.setFilter(f -> lifeTime < shelfLife * 0.25);
@@ -34,7 +38,6 @@ public class ControlQualityTest {
         long lifeTime = ChronoUnit.DAYS.between(createDate, now);
         setPredicates(shelfLife, lifeTime);
         Food food = new Food("milk", createDate, expireDate, 83, 0.3);
-        ControlQuality controlQuality = new ControlQuality(warehouse, shop, trash);
         controlQuality.distribution(food);
         assertEquals(warehouse.getFoods().toString(), "[" + food + "]");
     }
@@ -47,7 +50,6 @@ public class ControlQualityTest {
         long lifeTime = ChronoUnit.DAYS.between(createDate, now);
         setPredicates(shelfLife, lifeTime);
         Food food = new Food("milk", createDate, expireDate, 83, 0.3);
-        ControlQuality controlQuality = new ControlQuality(warehouse, shop, trash);
         controlQuality.distribution(food);
         assertEquals(shop.getFoods().toString(), "[" + food + "]");
     }
@@ -60,7 +62,6 @@ public class ControlQualityTest {
         long lifeTime = ChronoUnit.DAYS.between(createDate, now);
         setPredicates(shelfLife, lifeTime);
         Food food = new Food("milk", createDate, expireDate, 83, 0.75);
-        ControlQuality controlQuality = new ControlQuality(warehouse, shop, trash);
         controlQuality.distribution(food);
         assertEquals(shop.getFoods().get(0).getPrice(), 62.25, 0.001);
     }
@@ -73,7 +74,6 @@ public class ControlQualityTest {
         long lifeTime = ChronoUnit.DAYS.between(createDate, now);
         setPredicates(shelfLife, lifeTime);
         Food food = new Food("milk", createDate, expireDate, 83, 0.3);
-        ControlQuality controlQuality = new ControlQuality(warehouse, shop, trash);
         controlQuality.distribution(food);
         assertEquals(trash.getFoods().toString(), "[" + food + "]");
     }
