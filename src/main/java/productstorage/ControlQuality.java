@@ -1,24 +1,18 @@
 package productstorage;
 
-
-import java.util.ArrayList;
+import java.util.List;
 
 public class ControlQuality {
-    ArrayList<Storage> storages;
+    List<Storage> storages;
 
-    public ControlQuality(ArrayList<Storage> storages) {
+    public ControlQuality(List<Storage> storages) {
         this.storages = storages;
     }
 
     public void distribution(Food food) {
         for (Storage s : storages) {
-            s.filter(food);
+            s.add(food);
         }
     }
-
-    public void addStorage(Storage storage) {
-        storages.add(storage);
-    }
-
 }
 
