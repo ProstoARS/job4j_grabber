@@ -5,16 +5,15 @@ import org.junit.Test;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.Assert.*;
 
 public class ControlQualityTest {
-    LocalDate now = LocalDate.now();
-    Storage warehouse = new Warehouse();
-    Storage shop = new Shop();
-    Storage trash = new Trash();
-    List<Storage> storages = new ArrayList<>(List.of(warehouse, shop, trash));
-    ControlQuality controlQuality = new ControlQuality(storages);
+    private final LocalDate now = LocalDate.now();
+    private final Storage warehouse = new Warehouse();
+    private final Storage shop = new Shop();
+    private final Storage trash = new Trash();
+    private final List<Storage> storages = new ArrayList<>(List.of(warehouse, shop, trash));
+    private final ControlQuality controlQuality = new ControlQuality(storages);
 
     @Test
     public void whenAddToWarehouse() {
@@ -22,7 +21,7 @@ public class ControlQualityTest {
         LocalDate expireDate = now.plusDays(10);
         Food food = new Food("milk", createDate, expireDate, 83, 30);
         controlQuality.distribution(food);
-        assertEquals(warehouse.getFoods().toString(), "[" + food + "]");
+        assertEquals(warehouse.getFoods(), List.of(food));
     }
 
     @Test
@@ -31,7 +30,7 @@ public class ControlQualityTest {
         LocalDate expireDate = now.plusDays(10);
         Food food = new Food("milk", createDate, expireDate, 83, 0.3);
         controlQuality.distribution(food);
-        assertEquals(shop.getFoods().toString(), "[" + food + "]");
+        assertEquals(shop.getFoods(), List.of(food));
     }
 
     @Test
@@ -46,9 +45,24 @@ public class ControlQualityTest {
     @Test
     public void whenAddToTrash() {
         LocalDate createDate = now.minusDays(8);
-        LocalDate expireDate = now;
-        Food food = new Food("milk", createDate, expireDate, 83, 30);
+        Food food = new Food("milk", createDate, now, 83, 30);
         controlQuality.distribution(food);
-        assertEquals(trash.getFoods().toString(), "[" + food + "]");
+        assertEquals(trash.getFoods(), List.of(food));
+    }
+
+    @Test
+    public void whenAddToAllStorage() {
+        Food milk = new Food("milk", now.minusDays(2), now.plusDays(10), 92, 30);
+        Food bread = new Food("bread", now.minusDays(3), now.plusDays(3), 50, 30);
+        Food meat = new Food("meat", now.minusDays(7), now.plusDays(2), 450, 30);
+        Food eggs = new Food("eggs", now.minusDays(20), now, 120, 30);
+        controlQuality.distribution(milk);
+        controlQuality.distribution(bread);
+        controlQuality.distribution(meat);
+        controlQuality.distribution(eggs);
+        assertEquals(warehouse.getFoods(), List.of(milk));
+        assertEquals(shop.getFoods(), List.of(bread, meat));
+        assertEquals(shop.getFoods().get(1).getPrice(), 315, 0.001);
+        assertEquals(trash.getFoods(), List.of(eggs));
     }
 }

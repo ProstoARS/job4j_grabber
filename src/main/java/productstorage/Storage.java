@@ -5,6 +5,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 public interface Storage {
+    int FRESH = 25;
+    int STALE = 75;
+    int EXPIRED = 100;
+
     default double getPercentLifeExpired(Food food) {
         LocalDate createDate = food.getCreateDate();
         LocalDate expireDate = food.getExpireDate();

@@ -5,19 +5,22 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Shop implements Storage {
-    List<Food> foods = new ArrayList<>();
-    Predicate<Food> predicate = f -> getPercentLifeExpired(f) >= 25 && getPercentLifeExpired(f) < 100;
+
+    private final List<Food> foods = new ArrayList<>();
+    private final Predicate<Food> predicate = f ->
+            getPercentLifeExpired(f) >= FRESH && getPercentLifeExpired(f) < EXPIRED;
 
     @Override
     public boolean add(Food food) {
-        if (!filter(food)) {
-            return false;
+        boolean check = false;
+        if (filter(food)) {
+            if (getPercentLifeExpired(food) > STALE) {
+                double sale = food.getPrice() * (food.getDiscount() / 100);
+                food.setPrice(food.getPrice() - sale);
+            }
+            check = foods.add(food);
         }
-        if (getPercentLifeExpired(food) > 75) {
-            double sale = food.getPrice() * (food.getDiscount() / 100);
-            food.setPrice(food.getPrice() - sale);
-        }
-        return foods.add(food);
+        return check;
     }
 
     @Override

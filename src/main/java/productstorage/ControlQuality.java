@@ -3,7 +3,7 @@ package productstorage;
 import java.util.List;
 
 public class ControlQuality {
-    List<Storage> storages;
+    private final List<Storage> storages;
 
     public ControlQuality(List<Storage> storages) {
         this.storages = storages;
