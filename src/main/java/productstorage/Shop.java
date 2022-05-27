@@ -8,13 +8,13 @@ public class Shop implements Storage {
 
     private final List<Food> foods = new ArrayList<>();
     private final Predicate<Food> predicate = f ->
-            getPercentLifeExpired(f) >= FRESH && getPercentLifeExpired(f) < EXPIRED;
+            getPercentLifeExpired(f) >= FreshnessConst.FRESH && getPercentLifeExpired(f) < FreshnessConst.EXPIRED;
 
     @Override
     public boolean add(Food food) {
         boolean check = false;
         if (filter(food)) {
-            if (getPercentLifeExpired(food) > STALE) {
+            if (getPercentLifeExpired(food) > FreshnessConst.STALE) {
                 double sale = food.getPrice() * (food.getDiscount() / 100);
                 food.setPrice(food.getPrice() - sale);
             }
