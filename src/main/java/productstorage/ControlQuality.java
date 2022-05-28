@@ -11,7 +11,8 @@ public class ControlQuality {
 
     public void distribution(Food food) {
         for (Storage s : storages) {
-           if (s.add(food)) {
+           if (s.filter(food)) {
+               s.add(food);
                break;
            }
         }
