@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.function.Predicate;
 
 public class Trash implements Storage {
-    List<Food> foods = new ArrayList<>();
-    Predicate<Food> predicate = f -> getPercentLifeExpired(f) >= FreshnessConst.EXPIRED;
+    private final List<Food> foods = new ArrayList<>();
+    private final Predicate<Food> predicate = f -> getPercentLifeExpired(f) >= FreshnessConst.EXPIRED;
 
     @Override
     public boolean add(Food food) {
