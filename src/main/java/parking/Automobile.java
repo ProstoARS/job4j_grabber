@@ -4,6 +4,6 @@ public class Automobile extends Car {
 
     public Automobile(String name, String number) {
         super(name, number);
-        super.setSize(1);
+        super.setSize(AutomobileSizeConst.ONE_SIZE);
     }
 }

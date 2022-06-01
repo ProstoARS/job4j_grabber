@@ -8,9 +8,9 @@ public class ParkingControl {
         this.trackPlace = trackPlace;
     }
 
-    public void distribution(Car car) {
+    public boolean distribution(Car car) {
         boolean check;
-        if (car.getSize() > 1) {
+        if (car.getSize() > AutomobileSizeConst.ONE_SIZE) {
             if (!trackPlace.addCar(car)) {
                 check = automobilePlace.addCar(car);
             } else {
@@ -19,9 +19,7 @@ public class ParkingControl {
         } else {
             check = automobilePlace.addCar(car);
         }
-        if (!check) {
-            throw new IllegalStateException("На парковке места нет");
-        }
+        return check;
     }
 
     public ParkingStore getAutomobilePlace() {

@@ -23,17 +23,20 @@ public class AutomobilePlace implements ParkingStore {
     }
 
     @Override
-    public void removeCar(Car car) {
+    public boolean removeCar(Car car) {
+        boolean check = false;
         if (cars.containsKey(car.getNumber())) {
             size = size + car.getSize();
             cars.remove(car.getNumber());
+            check = true;
         } else {
             System.out.println("такой машины нет на парковке");
         }
+        return check;
     }
 
     @Override
-    public int getSize() {
+    public int getFreePlaces() {
         return size;
     }
 }

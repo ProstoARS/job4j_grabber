@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 public class TrackPlace implements ParkingStore {
     private int size;
     private final Map<String, Car> cars = new HashMap<>();
-    private final Predicate<Car> predicate = c -> c.getSize() > 1;
+    private final Predicate<Car> predicate = c -> c.getSize() > AutomobileSizeConst.ONE_SIZE;
 
     public TrackPlace(int size) {
         this.size = size;
@@ -26,21 +26,24 @@ public class TrackPlace implements ParkingStore {
         return check;
     }
     @Override
-    public void removeCar(Car car) {
+    public boolean removeCar(Car car) {
+        boolean check = false;
         if (cars.containsKey(car.getNumber())) {
             size++;
             cars.remove(car.getNumber());
+            check = true;
         } else {
             System.out.println("такой машины нет на парковке");
         }
+        return check;
     }
 
     public boolean filter(Car car) {
         return predicate.test(car);
     }
 
-    public int getSize() {
+    @Override
+    public int getFreePlaces() {
         return size;
     }
-
 }
