@@ -9,14 +9,12 @@ public class ParkingControl {
     }
 
     public boolean distribution(Car car) {
-        boolean check;
-        if (car.getSize() > AutomobileSizeConst.ONE_SIZE) {
-            if (!trackPlace.addCar(car)) {
-                check = automobilePlace.addCar(car);
-            } else {
-                check = true;
-            }
-        } else {
+        boolean check = false;
+        if (car.getType() == TypeOfCar.TRACK && trackPlace.getFreePlaces() > 0) {
+                check = trackPlace.addCar(car);
+        } else if (car.getType() == TypeOfCar.TRACK && trackPlace.getFreePlaces() == 0) {
+            check = automobilePlace.addCar(car);
+        } else if (car.getType() == TypeOfCar.AUTOMOBILE) {
             check = automobilePlace.addCar(car);
         }
         return check;

@@ -17,7 +17,7 @@ public class TrackPlace implements ParkingStore {
     public boolean addCar(Car car) {
         boolean check = false;
         if (filter(car)) {
-            if (size - 1 >= 0) {
+            if (size - AutomobileSizeConst.ONE_SIZE >= 0) {
                 size--;
                 cars.put(car.getNumber(), car);
                 check = true;

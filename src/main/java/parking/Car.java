@@ -4,10 +4,15 @@ public abstract class Car {
     private int size;
     private final String name;
     private final String number;
+    private TypeOfCar type;
 
     public Car(String name, String number) {
         this.name = name;
         this.number = number;
+    }
+
+    public void setType(TypeOfCar type) {
+        this.type = type;
     }
 
     public void setSize(int size) {
@@ -24,5 +29,9 @@ public abstract class Car {
 
     public String getNumber() {
         return number;
+    }
+
+    public TypeOfCar getType() {
+        return type;
     }
 }
