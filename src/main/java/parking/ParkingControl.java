@@ -10,11 +10,11 @@ public class ParkingControl {
 
     public boolean distribution(Car car) {
         boolean check = false;
-        if (car.getType() == TypeOfCar.TRACK && trackPlace.getFreePlaces() > 0) {
+        if (car.getSize() > AutomobileSizeConst.ONE_SIZE && trackPlace.getFreePlaces() > 0) {
                 check = trackPlace.addCar(car);
-        } else if (car.getType() == TypeOfCar.TRACK && trackPlace.getFreePlaces() == 0) {
+        } else if (car.getSize() > AutomobileSizeConst.ONE_SIZE && trackPlace.getFreePlaces() == 0) {
             check = automobilePlace.addCar(car);
-        } else if (car.getType() == TypeOfCar.AUTOMOBILE) {
+        } else if (car.getSize() == AutomobileSizeConst.ONE_SIZE) {
             check = automobilePlace.addCar(car);
         }
         return check;
