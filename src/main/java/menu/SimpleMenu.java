@@ -8,34 +8,46 @@ public class SimpleMenu implements Menu {
 
     @Override
     public boolean add(String parentName, String childName, ActionDelegate actionDelegate) {
+        if (findItem(childName).isPresent()) {
+            return false;
+        }
         boolean check = false;
         MenuItem mi = new SimpleMenuItem(childName, actionDelegate);
         if (Objects.equals(parentName, Menu.ROOT)) {
             check = rootElements.add(mi);
-        } else if (findItem(parentName).isPresent()) {
-            check = findItem(parentName).get().menuItem.addChildren(mi);
+        } else {
+            Optional<ItemInfo> item = findItem(parentName);
+            if (item.isPresent()) {
+                check = item.get().menuItem.addChildren(mi);
+            }
         }
         return check;
     }
 
     @Override
     public Optional<MenuItemInfo> select(String itemName) {
-        if (findItem(itemName).isPresent()) {
-            ItemInfo ii = findItem(itemName).get();
-            return Optional.of(new MenuItemInfo(ii.menuItem, ii.number));
-        }
-        return Optional.empty();
+        return findItem(itemName).map(item -> new MenuItemInfo(item.menuItem, item.number));
     }
 
     @Override
     public Iterator<MenuItemInfo> iterator() {
-        DFSIterator dfsIterator = new DFSIterator();
-        List<MenuItemInfo> list = new ArrayList<>();
-        while (dfsIterator.hasNext()) {
-            ItemInfo ii = dfsIterator.next();
-            list.add(new MenuItemInfo(ii.menuItem, ii.number));
-        }
-        return list.iterator();
+       return new Iterator<>() {
+           final DFSIterator iterator = new DFSIterator();
+
+           @Override
+           public boolean hasNext() {
+               return iterator.hasNext();
+           }
+
+           @Override
+           public MenuItemInfo next() {
+               if (!hasNext()) {
+                   throw new NoSuchElementException();
+               }
+               ItemInfo ii = iterator.next();
+               return new MenuItemInfo(ii.menuItem, ii.number);
+           }
+       };
     }
 
     private Optional<ItemInfo> findItem(String name) {
