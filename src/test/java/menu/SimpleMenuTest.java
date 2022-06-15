@@ -47,7 +47,7 @@ public class SimpleMenuTest {
         menu.add("Сходить в магазин", "Купить продукты", STUB_ACTION);
         menu.add("Купить продукты", "Купить хлеб", STUB_ACTION);
         menu.add("Купить продукты", "Купить молоко", STUB_ACTION);
-        MenuPrinter menuPrinter = new Printer();
+        MenuPrinter menuPrinter = new InMemoryPrinter();
         StringBuilder expected = new StringBuilder();
         menuPrinter.print(menu);
         expected.append("1.Сходить в магазин")

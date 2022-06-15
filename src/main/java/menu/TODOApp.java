@@ -4,7 +4,13 @@ import java.util.Scanner;
 
 public class TODOApp {
 
-    public static final ActionDelegate STUB_ACTION = System.out::println;
+    private static final int ADD_TO_ROOT_ACTION = 1;
+    private static final int ADD_TO_PARENT_ACTION = 2;
+    private static final int ADD_ACTION = 3;
+    private static final int PRINT_TASK_ACTION = 4;
+    private static final int CLOSE_ACTION = 5;
+
+    private static final ActionDelegate STUB_ACTION = System.out::println;
 
     private final Scanner scanner;
 
@@ -15,7 +21,7 @@ public class TODOApp {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         TODOApp todoApp = new TODOApp(scanner);
-        MenuPrinter printer = new Printer();
+        MenuPrinter printer = new ConsolePrinter();
         Menu menu = new SimpleMenu();
         todoApp.runMenu(menu, printer);
     }
@@ -27,21 +33,20 @@ public class TODOApp {
             int paragraph = scanner.nextInt();
             scanner.nextLine();
             switch (paragraph) {
-                case 1:
+                case ADD_TO_ROOT_ACTION:
                     addTask(menu, Menu.ROOT);
                     break;
-                case 2:
+                case ADD_TO_PARENT_ACTION:
                     String parentName = askStr("Введите название задачи в которую хотите добавить пункт:");
                     addTask(menu, parentName);
                     break;
-                case 3:
+                case ADD_ACTION:
                     System.out.println("Этот пункт находиться в разроботке");
                     break;
-                case 4:
+                case PRINT_TASK_ACTION:
                     menuPrinter.print(menu);
-                    System.out.println(menuPrinter);
                     break;
-                case 5:
+                case CLOSE_ACTION:
                     run = false;
                     break;
                 default:
