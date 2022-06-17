@@ -26,4 +26,9 @@ public class Trash implements Storage {
     public boolean filter(Food food) {
         return predicate.test(food);
     }
+
+    @Override
+    public void clear() {
+        this.foods.clear();
+    }
 }

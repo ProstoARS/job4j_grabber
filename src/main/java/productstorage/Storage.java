@@ -18,4 +18,5 @@ public interface Storage {
     boolean add(Food food);
     List<Food> getFoods();
     boolean filter(Food food);
+    void clear();
 }
