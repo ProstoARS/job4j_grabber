@@ -21,15 +21,13 @@ public class ControlQuality {
     }
 
     public void resort() {
-        List<List<Food>> foods = storages
+        List<Food> foods = storages
                 .stream()
-                .map(Storage::getFoods)
+                .flatMap(storage -> storage.getFoods().stream())
                 .collect(Collectors.toList());
         storages.forEach(Storage::clear);
-        for (List<Food> lf : foods) {
-            for (Food f : lf) {
-                distribution(f);
-            }
+        for (Food f : foods) {
+            distribution(f);
         }
     }
 }
